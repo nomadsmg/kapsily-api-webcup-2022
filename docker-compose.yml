@@ -39,7 +39,7 @@ services:
             - '4641:80'
 
     api-php-fpm:
-        build: infra/docker/php-fpm
+        build: ./
         working_dir: /api
         volumes:
             - './api:/api'
