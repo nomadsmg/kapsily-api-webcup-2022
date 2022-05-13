@@ -7,7 +7,6 @@ use App\Dto\Security\Authentication\LoginRequestInputDto;
 use App\Entity\Security\User;
 use App\Notifier\Security\Authentication\MagicLinkNotification;
 use App\Repository\Security\UserRepository;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -28,7 +27,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
         AuthenticationUtils $authenticationUtils
     ) {
         if ($request->isMethod(Request::METHOD_POST)) {
-            $user = $userRepository->findOneByCredential('michaniainar@gmail.com');
+            $user = $userRepository->findOneByCredential($loginInputDto->email);
 
             if (!$user) {
                 return $this->sendJsonError([

@@ -20,8 +20,8 @@ abstract class ApiAbstractAction extends AbstractController
     protected function sendJsonSuccess(array $payload, array $extraFields = [], int $code = Response::HTTP_OK): JsonResponse
     {
         return $this->json([
-            'status' => self::SUCCESS,
-            $payload,
+            'status'  => self::SUCCESS,
+            'payload' => $payload,
             ...$extraFields,
         ], $code);
     }
@@ -30,7 +30,7 @@ abstract class ApiAbstractAction extends AbstractController
     {
         return $this->json([
             'status' => self::ERROR,
-            $validation,
+            ...$validation,
             ...$extraFields,
         ], $code);
     }
