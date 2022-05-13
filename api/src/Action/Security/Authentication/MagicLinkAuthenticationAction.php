@@ -16,10 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
-#[Route(path: "/magic-link")]
 class MagicLinkAuthenticationAction extends ApiAbstractAction
 {
-    #[Route(path: "/login", name: "magic_link_login")]
+    #[Route(path: "/api/login", name: "magic_link_login")]
     public function login(
         Request $request,
         NotifierInterface $notifier,
@@ -29,7 +28,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
         AuthenticationUtils $authenticationUtils
     ) {
         if ($request->isMethod(Request::METHOD_POST)) {
-            $user = $userRepository->findOneByCredential($loginInputDto->email);
+            $user = $userRepository->findOneByCredential('michaniainar@gmail.com');
 
             if (!$user) {
                 return $this->sendJsonError([
@@ -48,7 +47,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
             // send the notification to the user
             $notifier->send(
                 $notification,
-                new Recipient('michaniainar@gmail.com')
+                new Recipient($user->getEmail())
             );
 
             return $this->redirectToRoute('magic_link_check_email');
@@ -59,10 +58,14 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
         ]);
     }
 
-    #[Route(path: "/login/check-email", name: "magic_link_check_email")]
+    #[Route(path: "/api/login/check-email", name: "magic_link_check_email")]
     public function magicLinkCheckEmail(Request $request): Response
     {
-        return $this->render('magic_link/check_email.html.twig');
+        return $this->json([
+            'status' => 'success',
+            'message' => 'Magic link sent',
+        ]);
+        // return $this->render('magic_link/check_email.html.twig');
 
         // return $this->render('security/process_login_link.html.twig', [
         //     'expires' => $request->query->get('expires'),
@@ -71,13 +74,13 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
         // ]);
     }
 
-    #[Route(path: "/login/verify", name: "magic_link_verify")]
+    #[Route(path: "/magic", name: "magic_link_verify")]
     public function checkMagicLink(): void
     {
         throw new \Exception('will be handled by authenticator');
     }
 
-    #[Route(path: "/logout", name: "security_logout", methods: Request::METHOD_GET)]
+    #[Route(path: "/api/logout", name: "security_logout", methods: Request::METHOD_GET)]
     public function logout(): void
     {
         return;

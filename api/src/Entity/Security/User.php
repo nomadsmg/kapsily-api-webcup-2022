@@ -2,6 +2,7 @@
 
 namespace App\Entity\Security;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\Security\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -9,6 +10,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ApiResource()]
 class User implements UserInterface
 {
     public const INDENTIFIER = 'email';
