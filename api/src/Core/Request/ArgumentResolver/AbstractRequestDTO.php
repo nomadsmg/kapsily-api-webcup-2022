@@ -11,11 +11,7 @@ abstract class AbstractRequestDTO implements RequestDTOInterface
 
     public function __construct(private Request $request)
     {
-        if ($request->isXmlHttpRequest()) {
-            $this->payload = json_decode('' !== $request->getContent() ? $request->getContent() : '{}', true);
-        } else {
-            $this->payload = $request->request->all();
-        }
+        $this->payload = json_decode('' !== $request->getContent() ? $request->getContent() : '{}', true);
     }
 
     public function getRequest(): Request
