@@ -23,7 +23,8 @@ class PricingPlanOutputTransformer implements DataTransformerInterface
             ->setLevel($object->getLevel())
             ->setDescription($object->getDescription())
             ->setMinds($object->getMinds())
-            ->setYears($object->getYears());
+            ->setYears($object->getYears())
+            ->setOffres($object->getOfferToArray());
     }
 
     public function supportsTransformation($data, string $to, array $context = []): bool

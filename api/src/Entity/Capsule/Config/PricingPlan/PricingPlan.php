@@ -142,6 +142,24 @@ class PricingPlan
         return $this->pricingPlanOffers;
     }
 
+    public function getOfferToArray(): array
+    {
+        $offers = [];
+
+        /**
+         * @var PricingPlanOffer $pricingPlanOffer
+         */
+        foreach ($this->pricingPlanOffers as $pricingPlanOffer) {
+            $offers[] = [
+                'uuid' => $pricingPlanOffer->getOffer()->getUuid(),
+                'name' => $pricingPlanOffer->getOffer()->getName(),
+                'identifier' => $pricingPlanOffer->getOffer()->getIdentifier(),
+            ];
+        }
+
+        return $offers;
+    }
+
     public function addPricingPlanOffer(PricingPlanOffer $pricingPlanOffer): self
     {
         if (!$this->pricingPlanOffers->contains($pricingPlanOffer)) {
