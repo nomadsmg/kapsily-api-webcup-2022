@@ -4,6 +4,7 @@ namespace App\Repository\Capsule\Config\PricingPlan;
 
 use App\Entity\Capsule\Config\PricingPlan\PricingPlan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,28 +48,17 @@ class PricingPlanRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return PricingPlan[] Returns an array of PricingPlan objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getDefaultFreePricingPlan(): PricingPlan
+    {
+        $defaultPricingPlan = $this->findOneBy([
+            'level' => 0,
+            'minds' => 0,
+        ]);
 
-//    public function findOneBySomeField($value): ?PricingPlan
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if (null === $defaultPricingPlan) {
+            throw new EntityNotFoundException("Free pricing plan not found");
+        }
+
+        return $defaultPricingPlan;
+    }
 }

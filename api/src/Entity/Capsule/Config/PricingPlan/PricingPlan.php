@@ -3,11 +3,11 @@
 namespace App\Entity\Capsule\Config\PricingPlan;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Capsule\UserPlan\UserPlan;
 use App\Repository\Capsule\Config\PricingPlan\PricingPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PricingPlanRepository::class)]
@@ -39,10 +39,14 @@ class PricingPlan
     #[ORM\OneToMany(mappedBy: 'pricingPlan', targetEntity: PricingPlanOffer::class)]
     private $pricingPlanOffers;
 
+    #[ORM\OneToMany(mappedBy: 'pricingPlan', targetEntity: UserPlan::class)]
+    private $userMembers;
+
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->pricingPlanOffers = new ArrayCollection();
+        $this->userMembers = new ArrayCollection();
     }
 
     public function getUuid(): Uuid
@@ -146,6 +150,36 @@ class PricingPlan
             // set the owning side to null (unless already changed)
             if ($pricingPlanOffer->getPricingPlan() === $this) {
                 $pricingPlanOffer->setPricingPlan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserPlan>
+     */
+    public function getUserMembers(): Collection
+    {
+        return $this->userMembers;
+    }
+
+    public function addUserMember(UserPlan $userMember): self
+    {
+        if (!$this->userMembers->contains($userMember)) {
+            $this->userMembers[] = $userMember;
+            $userMember->setPricingPlan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserMember(UserPlan $userMember): self
+    {
+        if ($this->userMembers->removeElement($userMember)) {
+            // set the owning side to null (unless already changed)
+            if ($userMember->getPricingPlan() === $this) {
+                $userMember->setPricingPlan(null);
             }
         }
 
