@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Capsule\UserPlan;
+namespace App\DataTransformer\Capsule\UserPlan;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use App\Dto\Capsule\UserPlan\UserPlanSubscribeInput;

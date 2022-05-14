@@ -3,6 +3,7 @@
 namespace App\Entity\Capsule\Config\PricingPlan;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Dto\Capsule\Config\PricingPlan\PricingPlanOutput;
 use App\Entity\Capsule\UserPlan\UserPlan;
 use App\Repository\Capsule\Config\PricingPlan\PricingPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PricingPlanRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'pagination_enabled' => false,
+        ]
+    ],
+    output: PricingPlanOutput::class,
+)]
 class PricingPlan
 {
     #[ORM\Id]
