@@ -13,10 +13,15 @@ use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkDetails;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
 class MagicLinkAuthenticationAction extends ApiAbstractAction
 {
+    public function __construct(private string $frontUrl)
+    {
+    }
+
     #[Route(path: "/api/login", name: "magic_link_login")]
     public function login(
         Request $request,
@@ -35,11 +40,16 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
                 ]);
             }
 
-            $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
+            $magicLink = $loginLinkHandler->createLoginLink($user);
+
+            [
+                'path' => $path,
+                'query' => $query,
+            ] = parse_url($magicLink->getUrl());
 
             // create a notification based on the login link details
             $notification = new MagicLinkNotification(
-                $loginLinkDetails,
+                new LoginLinkDetails($this->frontUrl . $path . '?' . $query, $magicLink->getExpiresAt()),
                 'Sign with magic link' // email subject
             );
 
