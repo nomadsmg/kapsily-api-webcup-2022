@@ -61,4 +61,15 @@ class PricingPlanRepository extends ServiceEntityRepository
 
         return $defaultPricingPlan;
     }
+
+    public function getByIdentifier(string $identifier): PricingPlan
+    {
+        $pricingPlan = $this->findOneByIdentifier($identifier);
+
+        if (null === $pricingPlan) {
+            throw new EntityNotFoundException(sprintf('Pricing plan with identifier "%s" not found', $identifier));
+        }
+
+        return $pricingPlan;
+    }
 }

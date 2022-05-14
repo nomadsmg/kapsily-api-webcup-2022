@@ -2,6 +2,8 @@
 
 namespace App\Entity\Capsule\UserPlan;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Dto\Capsule\UserPlan\UserPlanSubscribeInput;
 use App\Entity\Capsule\Config\PricingPlan\PricingPlan;
 use App\Entity\Capsule\PlanPayment\PlanPayment;
 use App\Entity\Security\User;
@@ -9,9 +11,18 @@ use App\Repository\Capsule\UserPlan\UserPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserPlanRepository::class)]
+#[ApiResource(
+    collectionOperations: [
+        'subscribe_to_plan' => [
+            'method' => Request::METHOD_POST,
+            'input' => UserPlanSubscribeInput::class,
+        ]
+    ]
+)]
 class UserPlan
 {
     #[ORM\Id]
