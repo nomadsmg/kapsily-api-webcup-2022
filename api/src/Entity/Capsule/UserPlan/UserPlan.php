@@ -18,6 +18,7 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     collectionOperations: [
         'subscribe_to_plan' => [
+            'path' => '/user-plans',
             'method' => Request::METHOD_POST,
             'input' => UserPlanSubscribeInput::class,
         ]

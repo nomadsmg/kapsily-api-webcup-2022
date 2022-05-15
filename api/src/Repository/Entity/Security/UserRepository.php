@@ -53,7 +53,7 @@ class UserRepository extends ServiceEntityRepository
         $user = $this->findOneByUuid($uuid);
 
         if (null === $user) {
-            throw new EntityNotFoundException(sprintf('Pricing plan with uuid "%s" not found', $uuid));
+            throw new EntityNotFoundException(sprintf('User with uuid "%s" not found', $uuid));
         }
 
         return $user;

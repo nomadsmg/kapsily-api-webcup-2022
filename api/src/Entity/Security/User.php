@@ -3,6 +3,7 @@
 namespace App\Entity\Security;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Capsule\Balance\UserBalance;
 use App\Entity\Capsule\UserPlan\UserPlan;
 use App\Repository\Security\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,10 +42,14 @@ class User implements SecurityInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserPlan::class)]
     private $pricingPlans;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserBalance::class, cascade: ['persist', 'remove'])]
+    private $balance;
+
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->pricingPlans = new ArrayCollection();
+        $this->balance = (new UserBalance())->setUser($this);
     }
 
     public function getUuid(): string
@@ -156,5 +161,28 @@ class User implements SecurityInterface
         }
 
         return null;
+    }
+
+    public function getBalance(): ?UserBalance
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(UserBalance $balance): self
+    {
+        // set the owning side of the relation if necessary
+        if ($balance->getUser() !== $this) {
+            $balance->setUser($this);
+        }
+
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    #[Groups([self::GP_PROFILE])]
+    public function getCurrentBalance(): float
+    {
+        return $this->balance->getCurrent();
     }
 }
