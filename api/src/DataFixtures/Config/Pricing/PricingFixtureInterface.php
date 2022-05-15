@@ -30,18 +30,14 @@ interface PricingFixtureInterface
             'name'       => 'Témoignage',
         ],
         6 => [
-            'identifier' => 'offer_hologramme',
-            'name'       => 'Témoignage',
-        ],
-        7 => [
             'identifier' => 'offer_boomerang',
             'name'       => 'Boomerang',
         ],
-        8 => [
+        7 => [
             'identifier' => 'offer_dream_transmission',
             'name'       => 'Tramission de rêve',
         ],
-        9 => [
+        8 => [
             'identifier' => 'offer_hologramme',
             'name'       => 'Hologramme',
         ],
@@ -89,7 +85,6 @@ interface PricingFixtureInterface
             'offer_' . self::OFFERS[6]['identifier'],
             'offer_' . self::OFFERS[7]['identifier'],
             'offer_' . self::OFFERS[8]['identifier'],
-            'offer_' . self::OFFERS[9]['identifier'],
         ],
     ];
 }
