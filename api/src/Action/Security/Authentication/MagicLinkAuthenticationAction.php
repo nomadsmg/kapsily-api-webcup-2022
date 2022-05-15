@@ -42,7 +42,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
                     ->setEmail($loginInputDto->email)
                     ->setLastname('User');
 
-                $em->persist($em);
+                $em->persist($user);
                 $em->flush();
             }
 
