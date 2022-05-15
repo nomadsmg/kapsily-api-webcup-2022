@@ -20,25 +20,6 @@ use Symfony\Component\Uid\Uuid;
  *              "method"="POST",
  *              "controller" = HandleAddCapsuleAction::class,
  *              "deserialize" = false,
- *              "openapi_context" = {
- *                  "requestBody" = {
- *                      "description" = "File upload",
- *                      "required" = true,
- *                      "content" = {
- *                          "multipart/form-data" = {
- *                              "schema" = {
- *                                  "type" = "object",
- *                                  "properties" = {
- *                                      "media" = {
- *                                          "type" = "array",
- *                                          "description" = "Medias",
- *                                      },
- *                                  },
- *                              },
- *                          },
- *                      },
- *                  },
- *              },
  *          },
  *     },
  * )
