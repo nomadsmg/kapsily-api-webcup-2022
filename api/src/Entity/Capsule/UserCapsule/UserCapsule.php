@@ -3,31 +3,65 @@
 namespace App\Entity\Capsule\UserCapsule;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Action\UserCapsule\HandleAddCapsuleAction;
+use App\Entity\Media\Media;
 use App\Entity\Security\User;
 use App\Repository\Capsule\UserCapsule\UserCapsuleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserCapsuleRepository::class)]
-#[ApiResource()]
+/**
+ *  @ApiResource(
+ *     collectionOperations={
+ *          "add_capsule" = {
+ *              "method"="POST",
+ *              "controller" = HandleAddCapsuleAction::class,
+ *              "deserialize" = false,
+ *              "openapi_context" = {
+ *                  "requestBody" = {
+ *                      "description" = "File upload",
+ *                      "required" = true,
+ *                      "content" = {
+ *                          "multipart/form-data" = {
+ *                              "schema" = {
+ *                                  "type" = "object",
+ *                                  "properties" = {
+ *                                      "media" = {
+ *                                          "type" = "array",
+ *                                          "description" = "Medias",
+ *                                      },
+ *                                  },
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *              },
+ *          },
+ *     },
+ * )
+ */
 class UserCapsule
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     private Uuid $uuid;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $type;
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    // TODO: define type
+    private ?string $type = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'capsules')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'capsules', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, name: 'user_uuid', referencedColumnName: 'uuid')]
     private User $user;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private int $lifetime;
 
-    #[ORM\Column(type: 'array')]
-    private array $location = [];
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private string $location;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $note = null;
@@ -38,10 +72,14 @@ class UserCapsule
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
+    #[ORM\OneToMany(mappedBy: 'userCapsule', targetEntity: Media::class, cascade: ['persist'])]
+    private $medias;
+
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->createdAt = new \DateTime();
+        $this->medias = new ArrayCollection();
     }
 
     public function getUuid(): Uuid
@@ -85,12 +123,12 @@ class UserCapsule
         return $this;
     }
 
-    public function getLocation(): ?array
+    public function getLocation(): string
     {
         return $this->location;
     }
 
-    public function setLocation(array $location): self
+    public function setLocation(string $location): self
     {
         $this->location = $location;
 
@@ -129,6 +167,36 @@ class UserCapsule
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(Media $media): self
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
+            $media->setUserCapsule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): self
+    {
+        if ($this->medias->removeElement($media)) {
+            // set the owning side to null (unless already changed)
+            if ($media->getUserCapsule() === $this) {
+                $media->setUserCapsule(null);
+            }
+        }
 
         return $this;
     }

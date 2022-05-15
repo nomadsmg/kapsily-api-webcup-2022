@@ -10,6 +10,8 @@ parameters:
     public_dir: '%base_dir%/public'
     upload_dir: '%public_dir%/uploads'
     front_url: '%env(FRONT_URL)%'
+    base_url: '%env(ASSET_BASE_URL)%'
+    asset.base_url: '%base_url%'
 
 services:
     # default configuration for services in *this* file
