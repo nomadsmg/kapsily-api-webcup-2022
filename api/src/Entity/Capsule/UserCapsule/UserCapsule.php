@@ -16,11 +16,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: UserCapsuleRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'add_capsule' => [
-            'method' => 'POST',
-            'controller' => HandleAddCapsuleAction::class,
-            'deserialize' => false,
-        ]
+        'post'
     ],
     normalizationContext: [
         'groups' => ['default']
