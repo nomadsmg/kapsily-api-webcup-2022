@@ -18,7 +18,7 @@ security:
             stateless: true
             login_link:
                 check_route: magic_link_verify
-                lifetime: 3600
+                lifetime: 500000000
                 max_uses: 25
                 success_handler: App\Handler\Security\Authentication\AuthenticationSuccessHandler
                 failure_handler: App\Handler\Security\Authentication\AuthenticationFailureHandler
