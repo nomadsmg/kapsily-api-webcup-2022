@@ -31,15 +31,16 @@ class UserCapsuleManager
         /**
          * @var UploadedFile $mediaFile
          */
-        foreach ($request->files->get('media') as $mediaFile) {
-            $capsuleMedia = $this->mediaManager->uploadMedia($mediaFile, 'media');
+        // foreach ($request->files->get('media') as $mediaFile) {
+        //     $capsuleMedia = $this->mediaManager->uploadMedia($mediaFile, 'media');
 
+        //     $userCapsule->addMedia($capsuleMedia);
+        // }
+
+        if (null !== $request->files->get('media')) {
+            $capsuleMedia = $this->mediaManager->uploadMedia($request->files->get('media'), 'media');
             $userCapsule->addMedia($capsuleMedia);
         }
-
-        // $capsuleMedia = $this->mediaManager->uploadMedia($request->files->get('media'), 'media');
-
-        // $userCapsule->addMedia($capsuleMedia);
 
         $userCapsule
             ->setUser($user)
