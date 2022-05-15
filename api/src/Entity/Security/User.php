@@ -15,7 +15,11 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => [self::GP_PROFILE]
+    ]
+)]
 class User implements SecurityInterface
 {
     public const INDENTIFIER = 'email';
@@ -57,7 +61,7 @@ class User implements SecurityInterface
         $this->capsules = new ArrayCollection();
     }
 
-    public function getUuid(): string
+    public function getUuid(): Uuid
     {
         return $this->uuid;
     }

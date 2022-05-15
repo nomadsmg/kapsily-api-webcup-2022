@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: UserBalanceRepository::class)]
 class UserBalance
 {
-    const DEFAULT_FUND = 30;
+    const DEFAULT_FUND = 100;
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
