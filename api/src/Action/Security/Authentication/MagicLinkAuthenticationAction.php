@@ -8,6 +8,7 @@ use App\Entity\Security\User;
 use App\Notifier\Security\Authentication\MagicLinkNotification;
 use App\Repository\Security\UserRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -25,6 +26,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
 
     #[Route(path: "/api/login", name: "magic_link_login")]
     public function login(
+        EntityManagerInterface $em,
         Request $request,
         NotifierInterface $notifier,
         LoginLinkHandlerInterface $loginLinkHandler,
@@ -36,9 +38,12 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
             $user = $userRepository->findOneByCredential($loginInputDto->email);
 
             if (!$user) {
-                return $this->sendJsonError([
-                    'message' => sprintf('User account with email %s not found', $loginInputDto->email),
-                ]);
+                $user = (new User())
+                    ->setEmail($loginInputDto->email)
+                    ->setLastname('User');
+
+                $em->persist($em);
+                $em->flush();
             }
 
             $magicLink = $loginLinkHandler->createLoginLink($user);
