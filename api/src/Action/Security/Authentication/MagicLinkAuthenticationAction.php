@@ -7,6 +7,7 @@ use App\Dto\Security\Authentication\LoginRequestInputDto;
 use App\Entity\Security\User;
 use App\Notifier\Security\Authentication\MagicLinkNotification;
 use App\Repository\Security\UserRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -49,7 +50,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
 
             // create a notification based on the login link details
             $notification = new MagicLinkNotification(
-                new LoginLinkDetails($this->frontUrl . $path . '?' . $query, $magicLink->getExpiresAt()),
+                new LoginLinkDetails($this->frontUrl . $path . '?' . $query, (new \DateTimeImmutable())->modify('+24 month')),
                 'Sign with magic link' // email subject
             );
 

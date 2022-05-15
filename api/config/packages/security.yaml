@@ -19,7 +19,6 @@ security:
             login_link:
                 check_route: magic_link_verify
                 lifetime: 3600
-                max_uses: 25
                 success_handler: App\Handler\Security\Authentication\AuthenticationSuccessHandler
                 failure_handler: App\Handler\Security\Authentication\AuthenticationFailureHandler
                 signature_properties: [uuid]
@@ -43,6 +42,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
+        - { path: ^/api/pricing_plans, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

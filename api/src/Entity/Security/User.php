@@ -4,6 +4,7 @@ namespace App\Entity\Security;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Capsule\Balance\UserBalance;
+use App\Entity\Capsule\UserCapsule\UserCapsule;
 use App\Entity\Capsule\UserPlan\UserPlan;
 use App\Repository\Security\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,11 +46,15 @@ class User implements SecurityInterface
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserBalance::class, cascade: ['persist', 'remove'])]
     private $balance;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCapsule::class)]
+    private $capsules;
+
     public function __construct()
     {
         $this->uuid = Uuid::v6();
         $this->pricingPlans = new ArrayCollection();
         $this->balance = (new UserBalance())->setUser($this);
+        $this->capsules = new ArrayCollection();
     }
 
     public function getUuid(): string
@@ -184,5 +189,35 @@ class User implements SecurityInterface
     public function getCurrentBalance(): float
     {
         return $this->balance->getCurrent();
+    }
+
+    /**
+     * @return Collection<int, UserCapsule>
+     */
+    public function getCapsules(): Collection
+    {
+        return $this->capsules;
+    }
+
+    public function addCapsule(UserCapsule $capsule): self
+    {
+        if (!$this->capsules->contains($capsule)) {
+            $this->capsules[] = $capsule;
+            $capsule->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCapsule(UserCapsule $capsule): self
+    {
+        if ($this->capsules->removeElement($capsule)) {
+            // set the owning side to null (unless already changed)
+            if ($capsule->getUser() === $this) {
+                $capsule->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
