@@ -10,24 +10,27 @@ use App\Repository\Capsule\UserCapsule\UserCapsuleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserCapsuleRepository::class)]
-/**
- *  @ApiResource(
- *     collectionOperations={
- *          "add_capsule" = {
- *              "method"="POST",
- *              "controller" = HandleAddCapsuleAction::class,
- *              "deserialize" = false,
- *          },
- *     },
- * )
- */
+#[ApiResource(
+    collectionOperations: [
+        'add_capsule' => [
+            'method' => 'POST',
+            'controller' => HandleAddCapsuleAction::class,
+            'deserialize' => false,
+        ]
+    ],
+    normalizationContext: [
+        'groups' => ['default']
+    ]
+)]
 class UserCapsule
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Groups(['default'])]
     private Uuid $uuid;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
