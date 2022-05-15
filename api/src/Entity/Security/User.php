@@ -33,7 +33,7 @@ class User implements SecurityInterface
     #[Groups([self::GP_PROFILE])]
     private string $lastname;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups([self::GP_PROFILE])]
     private ?string $firstname = null;
 

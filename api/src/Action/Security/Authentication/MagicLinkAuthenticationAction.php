@@ -38,9 +38,7 @@ class MagicLinkAuthenticationAction extends ApiAbstractAction
             $user = $userRepository->findOneByCredential($loginInputDto->email);
 
             if (!$user) {
-                $user = (new User())
-                    ->setEmail($loginInputDto->email)
-                    ->setLastname('User');
+                $user = (new User())->setEmail($loginInputDto->email);
 
                 $em->persist($user);
                 $em->flush();
