@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // fetch("https://nomads.prosfteam.com/api/login", {
+        //     method: "POST",
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ "email": "sstroman@hotmail.com" })
+        // }).then(res => {
+        //     console.log("Request complete! response:", res);
+        // });
+
+        fetch("https://nomads.prosfteam.com/api/me", {
+            method: "GET",
+            headers: { 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTI1NDc3ODYsImV4cCI6MTY1MjU1MTM4Niwicm9sZXMiOltdLCJwZXJtaXNzaW9ucyI6WyJQRVJNSVNTSU9OX0EiLCJQRVJNSVNTSU9OX0IiXSwiZW1haWwiOiJzc3Ryb21hbkBob3RtYWlsLmNvbSJ9.TsN-07sGDQE4Cs1sMRhxsk_06PJmTKN8XYMsEjScMVGeDF7kRnb6NS9SPpdApf8oLYwk1Wu2LnH1_rld9AB60H0_-MLXtIe3oBCq9edDfm5v77hpzOZjywcFceNol0Xu-iraDkcKkeZnMx9dBwNAnkNiUE3uN9bs10yu-GJlazjmfv296KRuWMcv328t_u71jZ6_pwLovWaTpH9qwRqrO4fxedQCYqpOlJ1c8ncgXg2yqTU8WxPE9nZKsPEyzUT-_p7fFmYEuy2B-BcLQb8BALhE3g1GOBNJjEVGBgG-i9o5wdQpmntb3bXoflahPnuDhYIvkWQaDHHDo4XLiAhSKg' },
+        }).then(res => {
+            console.log("Request complete! response:", res);
+        });
+    </script>
+</body>
+
+</html>
